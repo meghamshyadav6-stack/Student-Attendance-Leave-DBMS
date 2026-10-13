@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Reports · AttendEase{% endblock %}
+{% block heading %}Attendance reports{% endblock %}
+{% block subtitle %}Review attendance percentages and identify students below the course requirement.{% endblock %}
+{% block content %}
+<section class="stats-grid report-summary">
+  <article class="stat-card"><div class="stat-icon blue">▤</div><p>Student-course records</p><strong>{{ rows|length }}</strong><small>Across enrolled courses</small></article>
+  <article class="stat-card"><div class="stat-icon green">✓</div><p>Meeting requirement</p><strong>{{ rows|selectattr('shortage','equalto',false)|selectattr('percentage','ne',none)|list|length }}</strong><small>At or above minimum</small></article>
+  <article class="stat-card"><div class="stat-icon orange">!</div><p>Attendance shortage</p><strong>{{ rows|selectattr('shortage','equalto',true)|list|length }}</strong><small>Below required percentage</small></article>
+</section>
+<section class="panel"><div class="panel-heading"><div><h3>Attendance by student and course</h3><p class="muted">Leave status is tracked separately and excluded from present/absent percentage.</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>Student</th><th>Course</th><th>Present</th><th>Absent</th><th>Leave</th><th>Attendance</th><th>Requirement</th></tr></thead><tbody>
+{% for r in rows %}<tr><td><div><strong>{{ r.name }}</strong><small>{{ r.roll_no }}</small></div></td><td><span class="roll">{{ r.code }}</span><small>{{ r.title }}</small></td><td>{{ r.present }}</td><td>{{ r.absent }}</td><td>{{ r.leave_count }}</td><td>
+  {% if r.percentage is not none %}<div class="percent-cell"><strong>{{ r.percentage }}%</strong><div class="progress"><span style="width: {{ [r.percentage,100]|min }}%"></span></div></div>{% else %}—{% endif %}
+</td><td>{% if r.percentage is none %}<span class="badge regular">No data</span>{% elif r.shortage %}<span class="badge rejected">Shortage</span>{% else %}<span class="badge approved">Met</span>{% endif %}<small>Minimum {{ r.minimum }}%</small></td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

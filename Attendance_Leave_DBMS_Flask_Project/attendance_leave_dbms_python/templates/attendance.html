@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Attendance · AttendEase{% endblock %}
+{% block heading %}Attendance register{% endblock %}
+{% block subtitle %}Record present, absent, or leave status for enrolled students.{% endblock %}
+{% block content %}
+<section class="panel form-panel"><div class="panel-heading"><div><h3>Mark attendance</h3><p class="muted">A student can have one attendance record per session.</p></div></div>
+<form method="post" class="form-grid">
+  <label>Class session<select name="session_id" required>{% for s in sessions %}<option value="{{ s.id }}">#{{ s.id }} · {{ s.code }} · {{ s.session_date }} · {{ s.topic }}</option>{% endfor %}</select></label>
+  <label>Student<select name="student_id" required>{% for s in students %}<option value="{{ s.id }}">{{ s.roll_no }} — {{ s.name }}</option>{% endfor %}</select></label>
+  <label>Status<select name="status"><option value="PRESENT">Present</option><option value="ABSENT">Absent</option><option value="LEAVE">Leave</option></select></label>
+  <div class="form-action"><button class="button" type="submit">Save attendance</button></div>
+</form></section>
+<section class="panel"><div class="panel-heading"><div><h3>Recent attendance records</h3><p class="muted">Latest 25 saved entries</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>Student</th><th>Course</th><th>Date</th><th>Topic</th><th>Status</th></tr></thead><tbody>
+{% for r in records %}<tr><td><div class="person"><span class="avatar">{{ r.name[:1] }}</span><div><strong>{{ r.name }}</strong><small>{{ r.roll_no }}</small></div></div></td><td>{{ r.code }}</td><td>{{ r.session_date }}</td><td>{{ r.topic }}</td><td><span class="badge {{ r.status|lower }}">{{ r.status }}</span></td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

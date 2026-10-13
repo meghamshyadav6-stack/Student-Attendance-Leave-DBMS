@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Leave applications · AttendEase{% endblock %}
+{% block heading %}Leave applications{% endblock %}
+{% block subtitle %}Submit a leave request and process pending approval decisions.{% endblock %}
+{% block content %}
+<section class="panel form-panel"><div class="panel-heading"><div><h3>New leave application</h3><p class="muted">Medical: 10 days · Casual: 3 days · On Duty: 7 days (demo rules).</p></div></div>
+<form method="post" class="form-grid">
+  <label>Student<select name="student_id" required>{% for s in students %}<option value="{{ s.id }}">{{ s.roll_no }} — {{ s.name }}</option>{% endfor %}</select></label>
+  <label>Leave type<select name="leave_type"><option>Medical</option><option>Casual</option><option>On Duty</option></select></label>
+  <label>From date<input type="date" name="from_date" required></label>
+  <label>To date<input type="date" name="to_date" required></label>
+  <label class="wide">Reason<input name="reason" placeholder="Brief reason for leave" required></label>
+  <div class="form-action"><button class="button" type="submit">Submit application</button></div>
+</form></section>
+<section class="panel"><div class="panel-heading"><div><h3>Application history</h3><p class="muted">{{ applications|length }} applications</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>Student</th><th>Leave</th><th>Dates</th><th>Reason</th><th>Status</th><th>Decision</th></tr></thead><tbody>
+{% for l in applications %}<tr><td><strong>{{ l.name }}</strong><small>{{ l.roll_no }}</small></td><td>{{ l.leave_type }}</td><td>{{ l.from_date }}<small>to {{ l.to_date }}</small></td><td>{{ l.reason }}</td><td><span class="badge {{ l.status|lower }}">{{ l.status }}</span></td><td>
+{% if l.status == 'PENDING' %}
+<form class="decision-form" method="post" action="{{ url_for('decision', application_id=l.id) }}">
+  <input name="approver" placeholder="Approver name" aria-label="Approver name" required>
+  <select name="decision" aria-label="Decision"><option value="APPROVED">Approve</option><option value="REJECTED">Reject</option></select>
+  <button class="button small" type="submit">Save</button>
+</form>
+{% else %}<span class="muted">Decision recorded</span>{% endif %}
+</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

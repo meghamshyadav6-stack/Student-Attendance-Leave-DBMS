@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · AttendEase{% endblock %}
+{% block heading %}Good day, administrator{% endblock %}
+{% block subtitle %}Here's an overview of the student attendance and leave system.{% endblock %}
+{% block content %}
+<section class="hero">
+  <div><p class="eyebrow light">STUDENT SERVICES PORTAL</p><h2>Clear records. Better decisions.</h2><p>Track class attendance, review leave requests, and monitor attendance requirements from a single workspace.</p><a class="button button-light" href="{{ url_for('reports') }}">View attendance report <span>→</span></a></div>
+  <div class="hero-art"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="hero-sheet"><div class="sheet-top"><span></span><span></span><span></span></div><div class="sheet-line long"></div><div class="sheet-line"></div><div class="sheet-check">✓</div><div class="sheet-line long"></div><div class="sheet-line short"></div></div></div>
+</section>
+<section class="stats-grid">
+  <article class="stat-card"><div class="stat-icon purple">♙</div><p>Total students</p><strong>{{ stats.students }}</strong><small>Student records</small></article>
+  <article class="stat-card"><div class="stat-icon blue">▤</div><p>Courses</p><strong>{{ stats.courses }}</strong><small>Active course list</small></article>
+  <article class="stat-card"><div class="stat-icon green">▦</div><p>Class sessions</p><strong>{{ stats.sessions }}</strong><small>Regular and makeup</small></article>
+  <article class="stat-card"><div class="stat-icon orange">◷</div><p>Pending leaves</p><strong>{{ stats.pending }}</strong><small>Awaiting decision</small></article>
+</section>
+<section class="two-col">
+  <article class="panel"><div class="panel-heading"><div><h3>Quick actions</h3><p class="muted">Jump straight into common tasks.</p></div></div>
+    <div class="quick-grid">
+      <a class="quick-action" href="{{ url_for('sessions') }}"><span class="quick-icon blue">＋</span><span><strong>Create session</strong><small>Add a class to the schedule</small></span><b>→</b></a>
+      <a class="quick-action" href="{{ url_for('attendance') }}"><span class="quick-icon purple">✓</span><span><strong>Mark attendance</strong><small>Record student presence</small></span><b>→</b></a>
+      <a class="quick-action" href="{{ url_for('leave') }}"><span class="quick-icon orange">↗</span><span><strong>Review leave</strong><small>Approve or reject requests</small></span><b>→</b></a>
+      <a class="quick-action" href="{{ url_for('students') }}"><span class="quick-icon green">♙</span><span><strong>Manage students</strong><small>View and add student records</small></span><b>→</b></a>
+    </div>
+  </article>
+  <article class="panel"><div class="panel-heading"><div><h3>Recent leave applications</h3><p class="muted">Latest requests in the system.</p></div><a class="text-link" href="{{ url_for('leave') }}">View all →</a></div>
+    {% if recent %}
+    <div class="request-list">
+      {% for item in recent %}
+      <div class="request-row"><div class="avatar">{{ item.name[:1] }}</div><div class="request-info"><strong>{{ item.name }}</strong><small>{{ item.leave_type }} · {{ item.from_date }}</small></div><span class="badge {{ item.status|lower }}">{{ item.status }}</span></div>
+      {% endfor %}
+    </div>
+    {% else %}<p class="empty">No leave applications yet.</p>{% endif %}
+  </article>
+</section>
+{% endblock %}

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Attendance & Leave DBMS{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark">A</span><div><strong>AttendEase</strong><small>Attendance & Leave DBMS</small></div></div>
+  <nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('students') }}">Students</a>
+    <a href="{{ url_for('sessions') }}">Sessions</a>
+    <a href="{{ url_for('attendance') }}">Attendance</a>
+    <a href="{{ url_for('leave') }}">Leave</a>
+    <a href="{{ url_for('reports') }}">Reports</a>
+  </nav>
+</header>
+<main class="container">
+  <div class="page-heading">
+    <div><p class="eyebrow">ACADEMIC MANAGEMENT</p><h1>{% block heading %}Dashboard{% endblock %}</h1><p class="muted">{% block subtitle %}Manage attendance, classes, and leave applications in one place.{% endblock %}</p></div>
+    <span class="status-pill"><span></span> Demo environment</span>
+  </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-stack">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+  <footer>AttendEase · Educational DBMS prototype · Flask + SQLite</footer>
+</main>
+</body>
+</html>

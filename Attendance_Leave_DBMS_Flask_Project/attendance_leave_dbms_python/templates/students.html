@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Students · AttendEase{% endblock %}
+{% block heading %}Students{% endblock %}
+{% block subtitle %}View student records and add students to the demo database.{% endblock %}
+{% block content %}
+<section class="panel form-panel"><div class="panel-heading"><div><h3>Add a student</h3><p class="muted">Roll number must be unique.</p></div></div>
+<form method="post" class="form-grid">
+  <label>Roll number<input name="roll_no" placeholder="e.g. CS21006" required></label>
+  <label>Student name<input name="name" placeholder="Full name" required></label>
+  <label>Email <span class="optional">(optional)</span><input type="email" name="email" placeholder="student@example.com"></label>
+  <div class="form-action"><button class="button" type="submit">＋ Add student</button></div>
+</form></section>
+<section class="panel"><div class="panel-heading"><div><h3>Student directory</h3><p class="muted">{{ students|length }} student records</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>Roll number</th><th>Student</th><th>Email</th><th>Record</th></tr></thead><tbody>
+{% for s in students %}<tr><td><span class="roll">{{ s.roll_no }}</span></td><td><div class="person"><span class="avatar">{{ s.name[:1] }}</span><strong>{{ s.name }}</strong></div></td><td>{{ s.email or '—' }}</td><td><span class="badge approved">Active</span></td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}
